@@ -15,6 +15,7 @@ public class UserDto {
     private String nickname;
     private String jwtToken;
     private List<String> allergies;
+    private String role;
 
     public static UserDto from(User user, List<String> allergies) {
         return UserDto.builder()
@@ -23,6 +24,7 @@ public class UserDto {
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .allergies(allergies)
+                .role(user.getRole())
                 .build();
     }
 }

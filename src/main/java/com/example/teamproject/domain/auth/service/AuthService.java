@@ -73,6 +73,7 @@ public class AuthService {
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
+                .role(user.getRole())
                 .jwtToken(token)
                 .build();
     }
