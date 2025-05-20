@@ -1,3 +1,5 @@
+
+
 jwt:
   secret: f336280f7fb039ab6abaa5e7b9c3c80c8605c50acc988236e376ca3f7cca0bd7
   expirationMs: 3600000
@@ -8,9 +10,9 @@ spring:
     name: team-project
 
   datasource:
-    url: jdbc:mysql://localhost:3306/team
+    url: jdbc:mysql://localhost:3306/team_project
     username: root
-    password: qwe1234
+    password: pw
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -22,3 +24,5 @@ spring:
       hibernate:
         format_sql: false
         use_sql_comments: true
+server:
+  port: 8081

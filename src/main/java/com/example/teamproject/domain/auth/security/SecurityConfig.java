@@ -44,8 +44,8 @@ public class SecurityConfig {
 
                         // UserController 의 signup/login 허용
                         .requestMatchers(HttpMethod.POST,
-                                "/api/team6/user/signup",
-                                "/api/team6/user/login"
+                                "/api/auth/user/signup",
+                                "/api/auth/user/login"
                         ).permitAll()
 
                         // 그 외 모든 요청은 인증 필요
