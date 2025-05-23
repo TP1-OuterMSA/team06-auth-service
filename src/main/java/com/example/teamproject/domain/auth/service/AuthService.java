@@ -1,21 +1,27 @@
 package com.example.teamproject.domain.auth.service;
 
 
-import com.example.teamproject.domain.auth.dto.request.LoginDto;
-import com.example.teamproject.domain.auth.dto.request.SignupDto;
+import com.example.teamproject.domain.auth.dto.request.LoginRequest;
+import com.example.teamproject.domain.auth.dto.request.RefreshRequest;
+import com.example.teamproject.domain.auth.dto.request.SignupRequest;
+import com.example.teamproject.domain.auth.dto.response.TokenResponse;
 import com.example.teamproject.domain.auth.dto.response.UserDto;
+import com.example.teamproject.domain.auth.security.CustomUserDetailsService;
 import com.example.teamproject.domain.auth.security.JwtTokenProvider;
 import com.example.teamproject.domain.user.entity.User;
 import com.example.teamproject.domain.user.repository.UserRepository;
 import com.example.teamproject.userAllergy.service.UserAllergyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +30,15 @@ public class AuthService {
     private final UserRepository userRepository;
     private final UserAllergyService userAllergyService;
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+
+    private final TokenService tokenService;
+
 
     /**
      * 회원가입
      */
-    public UserDto signup(SignupDto signupDto) {
+    public UserDto signup(SignupRequest signupDto) {
         if(userRepository.existsByUsername(signupDto.getUsername()))
             throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
         else if(userRepository.existsByEmail(signupDto.getEmail()))
@@ -55,32 +63,23 @@ public class AuthService {
     }
 
     /**
-     * 로그인 → AuthenticationManager 인증 → JWT 발급 → UserDto 반환
+     * 로그인 → AuthenticationManager 인증 → JWT(AT, RT) 발급, 반환
      */
-    public UserDto login(LoginDto loginDto) {
+    public TokenResponse login(LoginRequest loginRequest) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
                 )
         );
-
-        String token = jwtTokenProvider.generateToken(auth);
-
-        User user = getUserEntityByUsername(loginDto.getUsername());
-        return UserDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .role(user.getRole())
-                .jwtToken(token)
-                .build();
+        return tokenService.generateTokens(auth);
     }
 
-    // --- 내부 헬퍼 메서드 ---
-    private User getUserEntityByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+    public TokenResponse refresh(RefreshRequest refreshRequest) {
+        return tokenService.refresh(refreshRequest.getRefreshToken());
+    }
+
+    public boolean validateRefreshToken(String refreshToken) {
+        return tokenService.isRefreshTokenValid(refreshToken);
     }
 }

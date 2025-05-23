@@ -1,6 +1,6 @@
 package com.example.teamproject.domain.user.entity;
 
-import com.example.teamproject.domain.auth.dto.request.SignupDto;
+import com.example.teamproject.domain.auth.dto.request.SignupRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -48,7 +48,7 @@ public class User {
     private String profileImageType;
 
 
-    public static User from(SignupDto dto) {
+    public static User from(SignupRequest dto) {
         return User.builder()
                 .username(dto.getUsername())
                 .email(dto.getEmail())
