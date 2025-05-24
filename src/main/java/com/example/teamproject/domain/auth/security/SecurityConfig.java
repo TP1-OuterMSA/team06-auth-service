@@ -42,6 +42,9 @@ public class SecurityConfig {
                         // 인증 없이 접근 허용
                         //.requestMatchers(HttpMethod.POST, "/api/team6/user/**").permitAll()
 
+                        //health check
+                        .requestMatchers("/actuator/**").permitAll()
+
                         // UserController 의 signup/login 허용
                         .requestMatchers(HttpMethod.POST,
                                 "/api/auth/user/signup",
