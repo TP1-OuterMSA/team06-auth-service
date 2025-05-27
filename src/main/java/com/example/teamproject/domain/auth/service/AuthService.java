@@ -75,8 +75,8 @@ public class AuthService {
         return tokenService.generateTokens(auth);
     }
 
-    public TokenResponse refresh(RefreshRequest refreshRequest) {
-        return tokenService.refresh(refreshRequest.getRefreshToken());
+    public TokenResponse refresh(String refreshToken) {
+        return tokenService.refresh(refreshToken);
     }
 
     public boolean validateRefreshToken(String refreshToken) {
