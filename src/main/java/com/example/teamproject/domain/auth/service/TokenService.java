@@ -73,8 +73,7 @@ public class TokenService {
         // 5) 새 토큰 발급 & 저장 (generateTokens 내부 로직 재사용)
         UserDetails user = customUserDetailsService.loadUserByUsername(username);
         Authentication auth =
-                new UsernamePasswordAuthenticationToken(
-                        user, null, user.getAuthorities());
+                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         return generateTokens(auth);
     }
 
