@@ -139,6 +139,7 @@ public class JwtTokenProvider {
 
     /**
      * 5) 토큰 기반으로 Authentication 객체 반환
+     */
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(
