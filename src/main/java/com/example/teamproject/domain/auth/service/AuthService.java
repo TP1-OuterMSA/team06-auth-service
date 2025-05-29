@@ -1,6 +1,5 @@
 package com.example.teamproject.domain.auth.service;
 
-
 import com.example.teamproject.domain.auth.dto.request.LoginRequest;
 import com.example.teamproject.domain.auth.dto.request.RefreshRequest;
 import com.example.teamproject.domain.auth.dto.request.SignupRequest;
@@ -30,6 +29,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final UserAllergyService userAllergyService;
     private final AuthenticationManager authenticationManager;
+
     private final PasswordEncoder passwordEncoder;
 
     private final TokenService tokenService;

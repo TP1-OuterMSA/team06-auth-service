@@ -23,6 +23,7 @@ import java.util.Arrays;
 @RequestMapping("api/auth/user")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final AuthService authService;
 
     /** 회원가입  */
@@ -31,7 +32,7 @@ public class AuthController {
         UserDto signed = authService.signup(signupDto);
         return ResponseEntity.ok(signed);
     }
-
+  
     /**
      * 1) 로그인 → Access + Refresh Token 발급
      */

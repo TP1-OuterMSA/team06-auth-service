@@ -47,7 +47,6 @@ public class User {
     @Setter
     private String profileImageType;
 
-
     public static User from(SignupRequest dto) {
         return User.builder()
                 .username(dto.getUsername())

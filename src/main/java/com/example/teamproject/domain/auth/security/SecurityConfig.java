@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
@@ -39,7 +40,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 인증 없이 접근 허용
                         //.requestMatchers(HttpMethod.POST, "/api/team6/user/**").permitAll()
-
                         // UserController 의 signup/login 허용
                         .requestMatchers(HttpMethod.POST,
                                 "/api/auth/user/signup",
