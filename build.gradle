@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.github.davidmc24.gradle.plugin.avro' version '1.5.0'
 }
 
 group = 'com.example'
@@ -11,6 +12,11 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://packages.confluent.io/maven/' }
 }
 
 configurations {
@@ -51,6 +57,26 @@ dependencies {
   // monitoring
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	//kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	//avro
+	implementation 'org.apache.avro:avro:1.11.4'
+	implementation 'io.confluent:kafka-avro-serializer:7.6.0'
+}
+
+avro {
+	fieldVisibility = "PRIVATE"
+}
+sourceSets {
+	main {
+		java {
+			// <-- tell Gradle “also look in the Avro‐gen folder”
+			srcDir "$buildDir/generated-main-avro-java"
+		}
+	}
 }
 
 tasks.named('test') {

@@ -1,5 +1,6 @@
 package com.example.teamproject.domain.auth.service;
 
+import com.example.kafka_schemas.UserEvent;
 import com.example.teamproject.domain.auth.dto.request.LoginRequest;
 import com.example.teamproject.domain.auth.dto.request.RefreshRequest;
 import com.example.teamproject.domain.auth.dto.request.SignupRequest;
@@ -9,6 +10,8 @@ import com.example.teamproject.domain.auth.security.CustomUserDetailsService;
 import com.example.teamproject.domain.auth.security.JwtTokenProvider;
 import com.example.teamproject.domain.user.entity.User;
 import com.example.teamproject.domain.user.repository.UserRepository;
+import com.example.teamproject.kafka.UserKafkaProducer;
+import com.example.teamproject.kafka.UserSignupEvent;
 import com.example.teamproject.userAllergy.service.UserAllergyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +21,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.example.teamproject.kafka.UserSignupEvent;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +37,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final TokenService tokenService;
-
+    private final UserKafkaProducer userKafkaProducer;
 
     /**
      * 회원가입
@@ -46,13 +50,21 @@ public class AuthService {
 
         User user = User.from(signupDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
 
-        userRepository.save(user);
 
         List<Long> allergies = signupDto.getAllergies();
         if (allergies != null && !allergies.isEmpty()) {
             for (Long allergyId : allergies) userAllergyService.saveUserAllergy(user, allergyId);
         }
+
+        UserSignupEvent event = new UserSignupEvent(
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getNickname()
+        );
+        userKafkaProducer.sendSignup(event);
 
         return UserDto.builder()
                 .id(user.getId())
