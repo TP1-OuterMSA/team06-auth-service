@@ -22,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
@@ -41,26 +40,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 인증 없이 접근 허용
                         //.requestMatchers(HttpMethod.POST, "/api/team6/user/**").permitAll()
-
-                        //health check
-                        .requestMatchers("/actuator/**").permitAll()
-
                         // UserController 의 signup/login 허용
                         .requestMatchers(HttpMethod.POST,
                                 "/api/auth/user/signup",
-                                "/api/auth/user/login"
+                                "/api/auth/user/login",
+                                "/api/auth/user/refresh",
+                                "/api/auth/user/refresh/validate"
                         ).permitAll()
-
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
+
                 )
 
                 // 사용자 인증 공급자(DAO) 등록
-                .authenticationProvider(daoAuthenticationProvider())
+                .authenticationProvider(daoAuthenticationProvider());
 
                 // JWT 필터를 UsernamePasswordAuthenticationFilter 전에 넣기
-                .addFilterBefore(jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(jwtAuthenticationFilter,
+//                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

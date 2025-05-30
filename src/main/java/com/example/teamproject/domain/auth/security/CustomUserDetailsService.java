@@ -15,23 +15,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    /** username → User 조회 → UserDetails 반환 */
+    /**
+     * username → User 조회 → UserDetails 반환
+     */
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found: " + username)
-                );
-
-        // DB에 저장된 role("USER", "ADMIN" 등)을 "ROLE_USER" 형태로 변환
-        List<SimpleGrantedAuthority> authorities =
-                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                authorities
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found: " + username)
         );
+        // DB에 저장된 role("USER", "ADMIN" 등)을 "ROLE_USER" 형태로 변환
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole());
+
+        return new CustomUserDetails(user, authority);
     }
 }

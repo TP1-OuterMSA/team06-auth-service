@@ -13,7 +13,7 @@ public class UserDto {
     private String username;
     private String email;
     private String nickname;
-    private String jwtToken;
+    private String accessToken;
     private List<String> allergies;
     private String role;
 
