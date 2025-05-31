@@ -11,7 +11,6 @@ import com.example.teamproject.domain.auth.security.JwtTokenProvider;
 import com.example.teamproject.domain.user.entity.User;
 import com.example.teamproject.domain.user.repository.UserRepository;
 import com.example.teamproject.kafka.UserKafkaProducer;
-import com.example.teamproject.kafka.UserSignupEvent;
 import com.example.teamproject.userAllergy.service.UserAllergyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.teamproject.kafka.UserSignupEvent;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
@@ -58,13 +56,14 @@ public class AuthService {
             for (Long allergyId : allergies) userAllergyService.saveUserAllergy(user, allergyId);
         }
 
-        UserSignupEvent event = new UserSignupEvent(
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
-                savedUser.getNickname()
-        );
-        userKafkaProducer.sendSignup(event);
+        UserEvent avroEvent = UserEvent.newBuilder()
+                .setId(savedUser.getId())
+                .setUsername(savedUser.getUsername())
+                .setEmail(savedUser.getEmail())
+                .setNickname(savedUser.getNickname())
+                .build();
+
+        userKafkaProducer.sendSignup(avroEvent);
 
         return UserDto.builder()
                 .id(user.getId())

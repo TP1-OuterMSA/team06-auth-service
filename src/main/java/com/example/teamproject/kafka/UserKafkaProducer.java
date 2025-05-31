@@ -10,11 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserKafkaProducer {
 
-    private final KafkaTemplate<String, UserSignupEvent> kafkaTemplate;
+    private final KafkaTemplate<String, UserEvent> kafkaTemplate;
 
-    public void sendSignup(UserSignupEvent event) {
+    public void sendSignup(UserEvent event) {
         // 토픽: user.signup, 키: username
-        kafkaTemplate.send("user.signup", event.username(), event);
-        log.info("Kafka 전송 성공 - topic=user.signup, key={}, payload={}", event.username(), event);
+        kafkaTemplate.send("user.event", event.getUsername(), event);
+        log.info("Kafka 전송 성공 → topic=user.signup, key={}, payload={}",
+                event.getUsername(), event);
     }
 }
