@@ -1,5 +1,6 @@
 package com.example.teamproject.domain.auth.service;
 
+
 import com.example.kafka_schemas.UserEvent;
 import com.example.teamproject.domain.auth.dto.request.LoginRequest;
 import com.example.teamproject.domain.auth.dto.request.RefreshRequest;
@@ -35,7 +36,11 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final TokenService tokenService;
+
     private final UserKafkaProducer userKafkaProducer;
+
+
+
 
     /**
      * 회원가입

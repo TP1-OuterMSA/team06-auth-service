@@ -58,6 +58,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'io.micrometer:micrometer-registry-prometheus'
 
+
 	//kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
@@ -77,6 +78,7 @@ sourceSets {
 			srcDir "$buildDir/generated-main-avro-java"
 		}
 	}
+
 }
 
 tasks.named('test') {

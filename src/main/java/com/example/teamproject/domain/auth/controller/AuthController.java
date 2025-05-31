@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.Arrays;
 
 @RestController
-@RequestMapping("api/auth/user")
+@RequestMapping("api/team06-auth-service/auth/user")
 @RequiredArgsConstructor
 public class AuthController {
 
