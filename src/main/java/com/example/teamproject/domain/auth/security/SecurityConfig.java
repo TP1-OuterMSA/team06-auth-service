@@ -42,10 +42,10 @@ public class SecurityConfig {
                         //.requestMatchers(HttpMethod.POST, "/api/team6/user/**").permitAll()
                         // UserController 의 signup/login 허용
                         .requestMatchers(HttpMethod.POST,
-                                "/api/auth/user/signup",
-                                "/api/auth/user/login",
-                                "/api/auth/user/refresh",
-                                "/api/auth/user/refresh/validate"
+                                "/api/team06-auth-service/auth/user/signup",
+                                "/api/team06-auth-service/auth/user/login",
+                                "/api/team06-auth-service/auth/user/refresh",
+                                "/api/team06-auth-service/auth/user/refresh/validate"
                         ).permitAll()
                         .requestMatchers(
                                 "/actuator/health/**",
