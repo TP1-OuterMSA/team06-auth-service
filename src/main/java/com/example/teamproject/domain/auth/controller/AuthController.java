@@ -46,7 +46,7 @@ public class AuthController {
         Cookie refreshCookie = new Cookie("refreshToken", tokens.getRefreshToken());
         refreshCookie.setHttpOnly(true);           // JS 접근 차단
         refreshCookie.setSecure(true);             // HTTPS 환경에서만 전송
-        refreshCookie.setPath("/api/auth/user/refresh"); // RT를 처리할 엔드포인트 경로
+        refreshCookie.setPath("api/team06-auth-service/auth/user/refresh"); // RT를 처리할 엔드포인트 경로
         refreshCookie.setMaxAge((int) Duration.ofDays(7).getSeconds()); // 예: 7일
         response.addCookie(refreshCookie);
 
@@ -75,7 +75,7 @@ public class AuthController {
         Cookie newRefreshCookie = new Cookie("refreshToken", newTokens.getRefreshToken());
         newRefreshCookie.setHttpOnly(true);
         newRefreshCookie.setSecure(true);
-        newRefreshCookie.setPath("/api/auth/user/refresh");
+        newRefreshCookie.setPath("/api/team06-auth-service/auth/user/refresh");
         newRefreshCookie.setMaxAge((int) Duration.ofDays(7).getSeconds());
         response.addCookie(newRefreshCookie);
 
