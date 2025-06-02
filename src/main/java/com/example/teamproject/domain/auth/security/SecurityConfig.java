@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/actuator/health/**",
                                 "/api/team06-auth-service/actuator/health/**"
+
                         ).permitAll()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
