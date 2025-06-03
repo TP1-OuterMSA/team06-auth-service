@@ -18,7 +18,7 @@ public class UserKafkaProducer {
 
 
     public void sendSignup(UserEvent event) {
-        String topicName = "user.event";  // 브로커에 실제 존재하는 토픽 이름으로 맞추세요
+        String topicName = "user.event";
 
         CompletableFuture<SendResult<String, UserEvent>> future =
                 kafkaTemplate.send(topicName, event.getUsername(), event);
