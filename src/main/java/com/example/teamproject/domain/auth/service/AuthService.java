@@ -67,6 +67,7 @@ public class AuthService {
                 .setEmail(savedUser.getEmail())
                 .setNickname(savedUser.getNickname())
                 .build();
+        System.out.println("이벤트 보내기 : "+avroEvent.getId()+avroEvent.getUsername()+avroEvent.getEmail());
 
         userKafkaProducer.sendSignup(avroEvent);
 
